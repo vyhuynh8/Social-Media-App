@@ -1,51 +1,18 @@
 //requires GraphQL Apollo to run
 const { ApolloServer } = require('apollo-server');
 
-//requires graphQL Apollo dependency
-const gql = require('graphql-tag');
-
 //required for mongodb connection
 const mongoose = require('mongoose');
 
 //our credientals, good practice to have them in a separate file
 const {MONGODB} = require('./config.js');
 
-//get the Post Schema
-const Post = require('./models/Post');
+//importing the typeDefs for graphQL from different file
+const typeDefs = require('./graphQL/typeDefs');
 
-//type definition (tag template string)
-//queries for graphQL
-//! means its required
-const typeDefs = gql`
-    type Post {
-        id: ID! 
-        body: String!
-        username: String!
-        createdAt: String!
-    }
-    type Query {
-        #sayHi: String!
-        getPosts: [Post]
-    }
-`;
-
-//each of these queries need resolvers
-const resolvers = {
-    Query: {
-        //sayHi: () => 'Hello World'
-        async getPosts() {
-            //needed just in case post fails, you dont want the server to be stopped
-            //await needed bc async
-            //debugging bug found: forgot to return posts and post -> posts
-            try {
-                const posts = await Post.find();
-                return posts;
-            } catch (err) {
-                throw new Error(err);
-            }
-        }
-    }
-}
+//importing the resolvers for the typeDefs for graphQL
+//since it is in the index, we dont need to specify the specific file
+const resolvers = require('./graphQL/resolvers');
 
 //setting up GraphQL Apollo Server
 const server = new ApolloServer({
@@ -70,7 +37,16 @@ mongoose.connect(MONGODB, { useNewUrlParser: true, useUnifiedTopology: true})
         console.log(`Server running at ${res.url}`);});
 
 
-//to test out the query in graphQL in localhost
-//query {
-// sayHi
-//}
+// to test out the query in graphQL in localhost
+// query {
+//  sayHi
+// }
+// ctrl + space for fields in graphQL
+// query {
+//     getPosts{
+//       id
+//       body
+//       createdAt
+//       username
+//     }
+//   }
