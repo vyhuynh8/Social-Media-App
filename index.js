@@ -17,15 +17,33 @@ const Post = require('./models/Post');
 //queries for graphQL
 //! means its required
 const typeDefs = gql`
-    type Query {
-        sayHi : String! 
+    type Post {
+        id: ID! 
+        body: String!
+        username: String!
+        createdAt: String!
     }
-`
+    type Query {
+        #sayHi: String!
+        getPosts: [Post]
+    }
+`;
 
 //each of these queries need resolvers
 const resolvers = {
     Query: {
-        sayHi: () => 'Hello World'
+        //sayHi: () => 'Hello World'
+        async getPosts() {
+            //needed just in case post fails, you dont want the server to be stopped
+            //await needed bc async
+            //debugging bug found: forgot to return posts and post -> posts
+            try {
+                const posts = await Post.find();
+                return posts;
+            } catch (err) {
+                throw new Error(err);
+            }
+        }
     }
 }
 
