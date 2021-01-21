@@ -8,10 +8,11 @@ const { model, Schema } = require('mongoose');
 const userSchema = new Schema ({
     //passing in the fields, could specify if required
     //graphQL can be used to handle required fields rather than mongoose
+    //bug found: createdby vs createdAt
     username: String,
     password: String,
     email: String,
-    createdBy: String
+    createdAt: String
 });
 
 //export the module

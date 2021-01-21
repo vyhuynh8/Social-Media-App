@@ -1,3 +1,6 @@
+//use npm index => npm start to start application
+//get nodenom in order to automatically restart the server whenever theres any changes (npm i -D nodemon, edit package.json)
+
 //requires GraphQL Apollo to run
 const { ApolloServer } = require('apollo-server');
 

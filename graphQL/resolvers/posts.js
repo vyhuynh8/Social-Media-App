@@ -1,5 +1,6 @@
 //get the Post Schema
-const Post = require('./models/Post');
+//when moved over, noticed bug with incorrect file path bc new location
+const Post = require('../../models/Post');
 
 //what you're exporting out of this file to the main index file
 //each of these queries need resolvers
