@@ -20,10 +20,13 @@ const resolvers = require('./graphQL/resolvers');
 //setting up GraphQL Apollo Server
 const server = new ApolloServer({
     typeDefs,
-    resolvers
+    resolvers,
+    //has a callback, get request and response from express, req => request, forward it so that we have access to it
+    //BUG FOUND: needed to be req => req, not req to nothing
+    context: ({req}) => ({req})
 });
 
-//connecto mongodb database
+//connect to mongodb database
 //we're getting the string from the mongodb dashboard => connect your application for connection string
 //pass object useNewUrlParser, will get deprecation if we don't use it
 //had to add the useUnifiedTopology because of depreciated changes

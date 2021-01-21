@@ -13,7 +13,7 @@ module.exports = gql`
     }
 
     type User {
-        #reqires means user can opt out, but we must return it
+        #requires means user can opt out, but we must return it
         id: ID!
         email: String!
         token: String!
@@ -32,7 +32,18 @@ module.exports = gql`
     type Query {
         #sayHi: String!
         getPosts: [Post]
+        getPost(postId: ID!): Post
     }
+
+    #sample of getPost
+    # {
+    #    getPost(postId: "___") {
+    #        id
+    #        body
+    #        createdAt
+    #        username
+    #    }
+    #}
 
     #used for registering users, mutation bc change in db
     type Mutation {
@@ -40,5 +51,7 @@ module.exports = gql`
         register(registerInput: RegisterInput): User!
         #login type definition, only takes username and password
         login(username: String!, password: String!): User!
+        createPost(body: String!): Post!
+        deletePost(postId: ID!): String!
     }
 `;

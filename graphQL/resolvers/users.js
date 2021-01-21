@@ -27,6 +27,10 @@ function generateToken(user) {
 
 }
 
+//Note: You can also run a query in postman
+//send a request to localhost:5000
+//eg { "query": "mutation{login(username:\"user\", password:\"123456\") {id username token}}"}
+
 
 module.exports = {
     Mutation: {
