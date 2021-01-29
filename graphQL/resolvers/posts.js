@@ -80,6 +80,10 @@ module.exports = {
             //save this post, async
             const post = await newPost.save();
 
+            context.pubsub.publish('NEW_POST', {
+                newPost: post
+            }) 
+
             return post;
         },
 
@@ -103,6 +107,15 @@ module.exports = {
             }
         }
 
+    },
+
+    //we are listening via websockets in the background and whenever there is a new post
+    //there will be an notification in the clientside
+    Subscription: {
+        newPost: {
+            //arrow function
+            subscribe: (_, __, {pubsub}) => pubsub.asyncIterator('NEW_POST')
+        }
     }
     
 }

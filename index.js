@@ -1,8 +1,8 @@
 //use npm index => npm start to start application
 //get nodenom in order to automatically restart the server whenever theres any changes (npm i -D nodemon, edit package.json)
 
-//requires GraphQL Apollo to run
-const { ApolloServer } = require('apollo-server');
+//requires GraphQL Apollo to run, pubsub = publisher subscribe
+const { ApolloServer, PubSub } = require('apollo-server');
 
 //required for mongodb connection
 const mongoose = require('mongoose');
@@ -17,15 +17,17 @@ const typeDefs = require('./graphQL/typeDefs');
 //since it is in the index, we dont need to specify the specific file
 const resolvers = require('./graphQL/resolvers');
 
+//instantiate the pubsub and pass it the context
+const pubsub = new PubSub();
+
 //setting up GraphQL Apollo Server
 const server = new ApolloServer({
     typeDefs,
     resolvers,
     //has a callback, get request and response from express, req => request, forward it so that we have access to it
     //BUG FOUND: needed to be req => req, not req to nothing
-    context: ({req}) => ({req})
+    context: ({req}) => ({req, pubsub})
 });
-
 //connect to mongodb database
 //we're getting the string from the mongodb dashboard => connect your application for connection string
 //pass object useNewUrlParser, will get deprecation if we don't use it
